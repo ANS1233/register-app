@@ -8,16 +8,21 @@ environment {
 	    APP_NAME = "register-app-pipeline"
             RELEASE = "1.0.0"
             DOCKER_USER = "rokaya123"
-            DOCKER_PASS = 'dockerhub'
+            DOCKER_TOKEN = "dckr_pat_Mh-vPwxhLAW4Js5aktN6EESo6SY"
             IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
             IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"    
     }
 stages {
-        
-        stage("Cleanup Workspace"){
-                steps {
-                cleanWs()
+      stage("Docker Login") {
+            steps {
+                script {
+                    // Using echo to simulate input to the docker login command
+                    def loginCommand = "echo '${DOCKER_TOKEN}' | docker login -u '${DOCKER_USER}' --password-stdin"
+                    
+                    // Running the docker login command
+                    sh loginCommand
                 }
+            }
         }
 
         stage("Checkout from SCM"){
@@ -58,20 +63,19 @@ stage("Quality Gate"){
        }
 
 stage("Build & Push Docker Image") {
-            steps {
-                script {
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image = docker.build "${IMAGE_NAME}"
-                    }
-
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push('latest')
-                    }
+    steps {
+        script {
+            withCredentials([string(credentialsId: 'jenkins-dockerhub-access-token', variable: 'DOCKER_TOKEN')]) {
+                docker.withRegistry('https://index.docker.io/v1/', 'jenkins-dockerhub-access-token') {
+                    docker_image = docker.build "${IMAGE_NAME}"
+                    docker_image.push("${IMAGE_TAG}")
+                    docker_image.push('latest')
                 }
             }
+        }
+    }
+}
 
-          }
       
       } 
 
