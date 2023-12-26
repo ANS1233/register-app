@@ -8,7 +8,7 @@ environment {
 	    APP_NAME = "register-app-pipeline"
             RELEASE = "1.0.0"
             DOCKER_USER = "ansans1"
-            DOCKER_PASS = 'dockerhub'
+            DOCKER_CREDENTIALS_ID = 'dckr_pat_nukbwa4_4JFrVGBJId9KVB2ESYA'
             IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
             IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"    
     }
@@ -56,21 +56,6 @@ stage("Quality Gate"){
 
         
        }
-
-    stages {
-        stage('Docker Login') {
-            steps {
-                script {
-                    withCredentials([string(credentialsId: 'ansans1', variable: 'dckr_pat_nukbwa4_4JFrVGBJId9KVB2ESYA')]) {
-                        sh """
-                            docker login -u your-dockerhub-username -p \$DOCKERHUB_TOKEN
-                        """
-                    }
-                }
-            }
-        }
-        // Additional stages in your pipeline
-    }
 
 stage("Build & Push Docker Image") {
             steps {
