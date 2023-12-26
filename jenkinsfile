@@ -12,8 +12,21 @@ environment {
             IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
             IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"    
     }
+stages {
+        stage('Docker Login') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID, variable: 'DOCKERHUB_TOKEN')]) {
+                        sh """
+                            docker login -u ${DOCKER_USER} -p ${DOCKERHUB_TOKEN}
+                        """
+                    }
+                }
+            }
+        }
+        // Additional stages in your pipeline
+    }
   
-    stages{
         stage("Cleanup Workspace"){
                 steps {
                 cleanWs()
