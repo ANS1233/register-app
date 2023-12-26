@@ -13,16 +13,7 @@ environment {
             IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"    
     }
 stages {
-      stage("Docker Login") {
-            steps {
-                script {
-                    // Using echo to simulate input to the docker login command
-                    
-                    // Running the docker login command
-                    sh "docker login -u ${DOCKER_USER} --password-stdin <<< ${DOCKER_TOKEN}"
-                }
-            }
-        }
+      
 
         stage("Checkout from SCM"){
                 steps {
@@ -60,6 +51,17 @@ stage("Quality Gate"){
 
         
        }
+
+stage("Docker Login") {
+            steps {
+                script {
+                    // Using echo to simulate input to the docker login command
+                    
+                    // Running the docker login command
+                    sh "docker login -u ${DOCKER_USER} --password-stdin <<< ${DOCKER_TOKEN}"
+                }
+            }
+        }
 
 stage("Build & Push Docker Image") {
     steps {
