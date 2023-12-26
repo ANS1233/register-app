@@ -56,6 +56,22 @@ stage("Quality Gate"){
 
         
        }
+
+    stages {
+        stage('Docker Login') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'ansans1', variable: 'dckr_pat_nukbwa4_4JFrVGBJId9KVB2ESYA')]) {
+                        sh """
+                            docker login -u your-dockerhub-username -p \$DOCKERHUB_TOKEN
+                        """
+                    }
+                }
+            }
+        }
+        // Additional stages in your pipeline
+    }
+
 stage("Build & Push Docker Image") {
             steps {
                 script {
