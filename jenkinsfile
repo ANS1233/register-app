@@ -25,7 +25,7 @@ stages {
             }
         }
         // Additional stages in your pipeline
-    }
+
   
         stage("Cleanup Workspace"){
                 steps {
@@ -87,6 +87,10 @@ stage("Build & Push Docker Image") {
           }
       
       } 
+
+} 
+
+
 
   
 
