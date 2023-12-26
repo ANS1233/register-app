@@ -17,10 +17,9 @@ stages {
             steps {
                 script {
                     // Using echo to simulate input to the docker login command
-                    def loginCommand = "echo '${DOCKER_TOKEN}' | docker login -u '${DOCKER_USER}' --password-stdin"
                     
                     // Running the docker login command
-                    sh loginCommand
+                    sh "docker login -u ${DOCKER_USER} --password-stdin <<< ${DOCKER_TOKEN}"
                 }
             }
         }
