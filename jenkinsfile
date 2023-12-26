@@ -58,7 +58,7 @@ stage("Docker Login") {
                     // Using echo to simulate input to the docker login command
                     
                     // Running the docker login command
-                    sh "docker login -u ${DOCKER_USER} --password-stdin <<< ${DOCKER_TOKEN}"
+                    sh "echo ${DOCKER_TOKEN} | docker login -u ${DOCKER_USER} --password-stdin"
                 }
             }
         }
